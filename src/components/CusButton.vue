@@ -3,7 +3,6 @@
     class="cusbutton"
     :class="{'is-disabled':disabled}"
     :type="type"
-    :disabled="disabled"
     @click="$emit('click')"
   >
     <slot></slot>
@@ -34,7 +33,8 @@ export default {
   border-color: #20af0e;
   text-align: center;
   box-sizing: border-box;
-  outline: 0;
+  outline: none;
+  border: none;
   padding: 12px 20px;
   font-size: 16px;
   border-radius: 4px;

@@ -53,6 +53,16 @@ export default {
           alert('两次密码不一致')
           return
       }
+
+      if(this.user.password.length < 6){
+        alert('密码不得小于 6 位')
+      }
+
+      this.$axios.post('/api/users/register', this.user)
+        .then(res => {
+          alert('注册成功')
+          this.$router.push('/login')
+        })
     }
   },
   computed: {
