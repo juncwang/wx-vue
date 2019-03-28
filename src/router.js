@@ -26,6 +26,11 @@ const router =  new Router({
       ]
     },
     {
+      path: '/moments',
+      name: 'moments',
+      component: () => import('./views/Moments')
+    },
+    {
       path: '/login',
       name: 'login',
       component: () => import('./views/Login')

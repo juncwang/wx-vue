@@ -11,7 +11,8 @@ axios.interceptors.request.use( config => {
 axios.interceptors.response.use( res => {
     return res
 }, err => {
-    const { status } = err.response.status
+    const { status } = err.response
+    
     if(status == 401){
         localStorage.removeItem('wxToken')
         router.push('/login')
