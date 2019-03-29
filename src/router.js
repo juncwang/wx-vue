@@ -39,6 +39,11 @@ const router =  new Router({
       path: '/register',
       name: 'register',
       component: () => import('./views/Register')
+    },
+    {
+      path: '/publish',
+      name: 'publish',
+      component: () => import('./views/Publish')
     }
   ]
 })

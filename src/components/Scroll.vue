@@ -11,6 +11,17 @@
         </div>
       </div>
       <slot></slot>
+      <div class="pullup">
+        <div class="clear" v-if="!isDone">
+          <div class="fl">
+            <img width="16" src="../assets/scroll_load.gif" alt="">
+            <div class="fl">加载中...</div>
+          </div>
+        </div>
+        <div class="list-donetip" v-else>
+          <slot name="doneTip">没有更多数据</slot>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -33,7 +44,7 @@ export default {
   mounted() {
     setTimeout(() => {
       this.initScroll();
-    }, 20);
+    }, 50);
   },
   methods: {
     initScroll() {
@@ -43,6 +54,7 @@ export default {
 
       this.scroll = new BScroll(this.$refs.wrapper, { probeType: 1 });
 
+      // 滚动事件
       this.scroll.on('scroll', pos => {
           this.dragTip.showLoading = true
 
@@ -51,6 +63,7 @@ export default {
           }
       })
 
+      // 停止滚动事件
       this.scroll.on('touchEnd', pos => {
           if(pos.y > 50){
               this.dragTip.text = "刷新中..."
@@ -61,14 +74,28 @@ export default {
               this.dragTip.showLoading = false
           }
       })
+
+      // 滚动到底部事件
+      this.scroll.on('scrollEnd', () => {
+        // console.log(this.scroll.maxScrollY)
+        if(this.scroll.y <= this.scroll.maxScrollY + 50){
+          // 触发上拉加载事件
+          this.$emit('pullup')
+          this.$on('loadedDone',this.loadedDone)
+        }
+      })
     },
     reset(){
+        this.isDone = false
         setTimeout(() => {
             this.dragTip = {
                 text: "下拉刷新",
                 showLoading: false
             }
         },600)
+    },
+    loadedDone(){
+      this.isDone = true
     }
   }
 };

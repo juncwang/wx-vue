@@ -1,8 +1,8 @@
 <template>
   <div class="moments">
-    <Header title="朋友圈" :isLeft="true" :isRight="true" btnIcon="camera"></Header>
+    <Header title="朋友圈" :isLeft="true" :isRight="true" btnIcon="camera" @rightClick="$router.push('/publish')"></Header>
     <div class="container">
-      <Scroll @pulldown="loadData" ref='refresh'>
+      <Scroll @pulldown="loadData" @pullup="loadMore" ref='refresh'>
         <div class="head_wrapper">
           <div class="user_head">
             <span>{{user.username}}</span>
@@ -36,7 +36,9 @@ export default {
   },
   data() {
     return {
-      momentsList: []
+      momentsList: [],
+      page: 2,
+      size: 3
     };
   },
   methods: {
@@ -49,6 +51,24 @@ export default {
     },
     loadData(){
       this.getLatestData()
+      this.page = 2;
+    },
+    loadMore(){
+      
+      this.$axios.get(`/api/moments/${this.page}/${this.size}`)
+        .then(res => {
+          // console.log(res.data)
+          const result = [...res.data]
+
+          if(result.length > 0){
+            result.forEach(item => {
+              this.page++
+              this.momentsList.push(item)
+            })
+          }else{
+            this.$refs.refresh.$emit('loadedDone')
+          }
+        })
     }
   },
   components: {
