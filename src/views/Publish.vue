@@ -33,35 +33,47 @@ export default {
         }
     },
     methods: {
-        publish(){
-            const postData = {
-                userid: this.use.id,
-                text: this.text,
-                imgs: this.imgs.join('|')
+        uploadfile(){
+            let file = this.imgs[0]
+            this.imgs.splice(0,1)
+            let formdata = new FormData()
+            formdata.append('file',file)
+            formdata.append('submit',false)
+            let config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             }
-
-            this.$axios.post('api/moments/add', postData)
+            this.$axios.post('/api/files/upload', formdata, config)
                 .then(res => {
-                    alert('发布成功')
-                    this.$router.push('/moments')
+                    // console.log(res.data)
+                    if(this.imgs.length > 0){
+                        console.log(this.imgs.length)
+                        this.uploadfile()
+                        
+                    }else{
+                        console.log('hello world')
+                    }
                 })
+        },
+        publish(){
+            this.uploadfile()
+            
         },
         getImages(imgs){
             // 获取 base64
-            imgs.forEach(file => {
-                this.uploadFile(file)
-            })
+            this.imgs = imgs
         },
-        uploadFile(file){
-            let reader = new FileReader()
-            const _this = this
-            reader.onload = function(e){
-                // 把文件转换成 base64
-                _this.imgs.push(e.target.result)
-            }
-            reader.readAsDataURL(file)
+        // uploadFile(file){
+        //     let reader = new FileReader()
+        //     const _this = this
+        //     reader.onload = function(e){
+        //         // 把文件转换成 base64
+        //         _this.imgs.push(e.target.result)
+        //     }
+        //     reader.readAsDataURL(file)
 
-        }
+        // }
     },
     components: {
         Upload

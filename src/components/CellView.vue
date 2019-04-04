@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     getUser() {
-      const url = "/api/users/" + this.momentsObj.userid;
+      const url = "/api/users/getUserById/" + this.momentsObj.userid;
       this.$axios.get(url).then(res => {
         this.user.username = res.data.username;
         this.user.avatar = res.data.avatar;

@@ -30,8 +30,14 @@ export default {
       }
 
       let files = [...this.$refs.myFile.files];
+      // let file = this.$refs.myFile.files
+
+      // console.log(this.$refs.myFile.files)
+      // console.log(file)
+      // console.log(files[0])
 
       files.forEach(file => {
+
         this.allUploadFiles.push(file)
         let objUrl = this.getObjectURL(file);
         this.showFileData.push(objUrl)
