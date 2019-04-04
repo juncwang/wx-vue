@@ -22,7 +22,8 @@ export default {
     data(){
         return {
             text: "",
-            imgs: []
+            imgs: [],
+            tmpImgUri: ''
         }
     },
     computed: {
@@ -46,17 +47,30 @@ export default {
             }
             this.$axios.post('/api/files/upload', formdata, config)
                 .then(res => {
+                    this.tmpImgUri += res.data.uri
                     // console.log(res.data)
                     if(this.imgs.length > 0){
                         console.log(this.imgs.length)
+                         this.tmpImgUri += '|'
                         this.uploadfile()
-                        
                     }else{
-                        console.log('hello world')
+                        let user = jwtDecode(localStorage.getItem('wxToken'))
+                        console.log(this.tmpImgUri)
+                        const data = {
+                            userid: user.id,
+                            text: this.text,
+                            imgs: this.tmpImgUri
+                        }
+                        this.$axios.post('/api/moments/add',data)
+                            .then(res => {
+                                alert('添加成功')
+                                this.$router.push('/moments')
+                            })
                     }
                 })
         },
         publish(){
+            this.tmpImgUri = []
             this.uploadfile()
             
         },
