@@ -8,7 +8,7 @@ import axios from './http';
 
 console.log(process.env.VUE_APP_BASE_URI)
 
-// axios.defaults.baseURL = process.env.VUE_APP_BASE_URI
+axios.defaults.baseURL = process.env.VUE_APP_BASE_URI
 axios.defaults.timeout = 5000
 
 Vue.config.productionTip = false
